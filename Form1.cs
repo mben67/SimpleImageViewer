@@ -11,7 +11,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using static SimpleImageViewer.EventHandlers;
 
 
 namespace SimpleImageViewer
@@ -44,8 +43,7 @@ namespace SimpleImageViewer
         private int currentY;
 
         //Clases externas propias
-        readonly Style style = new Style();
-        CargarImagen imagen;
+       
         readonly EstadosMenus estadosMenus = new();
         readonly ModifImagen modifImagen = new();
 
@@ -61,16 +59,16 @@ namespace SimpleImageViewer
              * se llama a la clase style para setear el estado inicial y las dimensiones del form y su color de fondo
              */
             
-            style.EstadoInicial(this);
-            style.Dimensiones(this,1280,720);//default (1280,720)
-            style.ColorDeFondo(this, 238, 243, 250);//default (238,243,250)
+            Style.EstadoInicial(this);
+            Style.Dimensiones(this,1280,720);//default (1280,720)
+            Style.ColorDeFondo(this, 238, 243, 250);//default (238,243,250)
            
             //Clase Style para backcolor  of the picturebox
-            style.ColorFondoPictureBox(pictureBox1, 238, 243, 250);//default(238,243,250)
+            Style.ColorFondoPictureBox(pictureBox1, 238, 243, 250);//default(238,243,250)
             
             //Class style para back color de menu superior y remover el area gris de los items del menu superior
-            style.RemueveAreaGrisSubmenus(menuStrip1);
-            style.ColorFondoMenuStrip(menuStrip1,216,229,242);//default (216,229,242)
+            Style.RemueveAreaGrisSubmenus(menuStrip1);
+            Style.ColorFondoMenuStrip(menuStrip1,216,229,242);//default (216,229,242)
             
 
 
@@ -132,7 +130,8 @@ namespace SimpleImageViewer
         private void Form1_Load(object sender, EventArgs e)
         {
             
-            this.Text = "Image Viewer - Ver: "+version.ToString();
+            //se actualiza la barra de titulo sin ombre de archivo
+            Style.NombreImgTitulo(this,null);
 
             //es el que permite que el form registre los eventos de keyboard
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(KeyEvent);
@@ -214,8 +213,9 @@ namespace SimpleImageViewer
         public void CargarImg(string nombreImagen)
         {
 
-            //se invca a la clase CargarImagen para mostrar la ruta de la imagen en la barra de titulo
-            imagen = new CargarImagen(this, nombreImagen);
+            //se invca a la clase Style para mostrar la ruta de la imagen en la barra de titulo
+            Style.NombreImgTitulo(this, nombreImagen);
+
 
 
             string soloNombre = Path.GetFileName(nombreImagen);
@@ -260,7 +260,8 @@ namespace SimpleImageViewer
                  * Si la imagen no es Webp
                  * inicia carga de Imagen normal 
                  */
-                this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+nombreImagen;
+               // this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+nombreImagen;
+               // CargarImagen.NombreImgTitulo(this, nombreImagen);
 
                 using (Image imgFromFile = Image.FromFile(nombreImagen))
                 {
@@ -432,8 +433,8 @@ namespace SimpleImageViewer
                         siguienteImagen = BuscaImage2(currentIndice.ToString(), imagelist);
                         pictureBox1.Image = null;
 
-                        //this.Text = "Image Viewer: " + siguienteImagen;
-                        this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+siguienteImagen;
+                        //se actualiza el nombre de archivo en la barra de titulo 
+                        Style.NombreImgTitulo(this,siguienteImagen);
 
 
                         /*inicia codigo de webp image*/
@@ -499,8 +500,9 @@ namespace SimpleImageViewer
                         siguienteImagen = BuscaImage2(currentIndice.ToString(), imagelist);
                         pictureBox1.Image = null;
 
-                        this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+siguienteImagen;
-                        //this.Text = "Image Viewer: " + siguienteImagen;
+                        //se actualiza el nombre del archivo en la barra de titulo
+                        Style.NombreImgTitulo(this,siguienteImagen);
+                        
 
                         string soloNombre = Path.GetFileName(siguienteImagen);
                         string extension = Path.GetExtension(soloNombre);
@@ -580,9 +582,9 @@ namespace SimpleImageViewer
                         pictureBox1.Image = null;
 
 
-                        this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+prevImagen;
-                        //this.Text = "Image Viewer: " + prevImagen;
-
+                        //se actualiz el nombre del archivo en la barra de titulo
+                        Style.NombreImgTitulo(this,prevImagen);
+                        
                         /*
                          * se carga la imagen en el picturebox
                          */
@@ -640,10 +642,8 @@ namespace SimpleImageViewer
                         prevImagen = BuscaImage2(currentIndice.ToString(), imagelist);
                         pictureBox1.Image = null;
 
-                        /* se actualiza el titulo de la aplicación */
-                        //this.Text = "Image Viewer: " + prevImagen;
-                        this.Text = "Image Viewer - Ver: "+version.ToString()+prevImagen;
-
+                        //se actualiza el nombre del archivo en la barra de titulo
+                        Style.NombreImgTitulo(this,prevImagen);
 
                         string soloNombre = Path.GetFileName(prevImagen);
                         string extension = Path.GetExtension(soloNombre);
@@ -876,8 +876,9 @@ namespace SimpleImageViewer
         /* end drag and move*/
         internal void CerrarImagen(object sender, EventArgs e)
         {
-            //this.Text = "Image Viewer";
-            this.Text = "Image Viewer - Ver: "+version.ToString();
+            //se actualiza la barra de titulo sin el nombre del archivo 
+            Style.NombreImgTitulo(this,null);
+            
             files = null;
             nombreImagen = "";
             myKey = "";
