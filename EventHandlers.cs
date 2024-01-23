@@ -20,7 +20,7 @@ namespace SimpleImageViewer
             formulario.flipVMenuItem.Click += formulario.flipVImagen;
             formulario.saveImageStripMenuItem.Click += formulario.savePictureBox;
             formulario.saveSelectionMenuItem.Click += formulario.SaveSelection;
-            formulario.selectToolMenuItem.Click += formulario.selectToolStart;
+            formulario.selectToolMenuItem.Click += formulario.SelectToolStart;
             formulario.openFileLocationMenuItem.Click += formulario.abrirEnExplorer;
         
         }

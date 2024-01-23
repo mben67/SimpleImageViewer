@@ -67,7 +67,7 @@ namespace SimpleImageViewer
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { abrirOpenDialogFile, closeStripMenuItem, exitStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F;
+            toolStripMenuItem1.ShowShortcutKeys = false;
             toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
             toolStripMenuItem1.Text = "File";
             // 
@@ -75,21 +75,21 @@ namespace SimpleImageViewer
             // 
             abrirOpenDialogFile.Name = "abrirOpenDialogFile";
             abrirOpenDialogFile.ShowShortcutKeys = false;
-            abrirOpenDialogFile.Size = new System.Drawing.Size(180, 22);
+            abrirOpenDialogFile.Size = new System.Drawing.Size(117, 22);
             abrirOpenDialogFile.Text = "Open File";
             // 
             // closeStripMenuItem
             // 
             closeStripMenuItem.Name = "closeStripMenuItem";
             closeStripMenuItem.ShowShortcutKeys = false;
-            closeStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            closeStripMenuItem.Size = new System.Drawing.Size(117, 22);
             closeStripMenuItem.Text = "Close File";
             // 
             // exitStripMenuItem
             // 
             exitStripMenuItem.Name = "exitStripMenuItem";
             exitStripMenuItem.ShowShortcutKeys = false;
-            exitStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            exitStripMenuItem.Size = new System.Drawing.Size(117, 22);
             exitStripMenuItem.Text = "Exit";
             // 
             // viewStripMenuItem
@@ -104,7 +104,7 @@ namespace SimpleImageViewer
             viewFullSizeStripMenuItem.Enabled = false;
             viewFullSizeStripMenuItem.Name = "viewFullSizeStripMenuItem";
             viewFullSizeStripMenuItem.ShowShortcutKeys = false;
-            viewFullSizeStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            viewFullSizeStripMenuItem.Size = new System.Drawing.Size(176, 22);
             viewFullSizeStripMenuItem.Text = "View Real Size";
             // 
             // exitFullSizeStripMenuItem
@@ -112,7 +112,7 @@ namespace SimpleImageViewer
             exitFullSizeStripMenuItem.Enabled = false;
             exitFullSizeStripMenuItem.Name = "exitFullSizeStripMenuItem";
             exitFullSizeStripMenuItem.ShowShortcutKeys = false;
-            exitFullSizeStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            exitFullSizeStripMenuItem.Size = new System.Drawing.Size(176, 22);
             exitFullSizeStripMenuItem.Text = "View Adjusted Mode";
             exitFullSizeStripMenuItem.Visible = false;
             // 
@@ -121,7 +121,7 @@ namespace SimpleImageViewer
             fullScreenStripMenuItem.Enabled = false;
             fullScreenStripMenuItem.Name = "fullScreenStripMenuItem";
             fullScreenStripMenuItem.ShowShortcutKeys = false;
-            fullScreenStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            fullScreenStripMenuItem.Size = new System.Drawing.Size(176, 22);
             fullScreenStripMenuItem.Text = "FullScreen";
             // 
             // openFileLocationMenuItem
@@ -129,7 +129,7 @@ namespace SimpleImageViewer
             openFileLocationMenuItem.Enabled = false;
             openFileLocationMenuItem.Name = "openFileLocationMenuItem";
             openFileLocationMenuItem.ShowShortcutKeys = false;
-            openFileLocationMenuItem.Size = new System.Drawing.Size(180, 22);
+            openFileLocationMenuItem.Size = new System.Drawing.Size(176, 22);
             openFileLocationMenuItem.Text = "Open File Location";
             // 
             // modifyStripMenuItem

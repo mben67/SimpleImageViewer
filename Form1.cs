@@ -8,6 +8,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using static SimpleImageViewer.EventHandlers;
@@ -47,6 +48,8 @@ namespace SimpleImageViewer
         CargarImagen imagen;
         readonly EstadosMenus estadosMenus = new();
         readonly ModifImagen modifImagen = new();
+
+        Version version = Assembly.GetExecutingAssembly().GetName().Version;
 
 
         public Form1(string recibido)
@@ -120,8 +123,7 @@ namespace SimpleImageViewer
              * se asignan ShorcutsKeys a los menus del top menu
              */
             ShortCutKeys.AsignarTeclasAccesoRapido(abrirOpenDialogFile, Keys.Control | Keys.O);//abrir archivo
-            ShortCutKeys.AsignarTeclasAccesoRapido(viewFullSizeStripMenuItem, Keys.Control | Keys.F);//ver tamaño real
-            
+            ShortCutKeys.AsignarTeclasAccesoRapido(exitStripMenuItem, Keys.Control | Keys.E);//cerrar programa
 
 
         }
@@ -129,6 +131,9 @@ namespace SimpleImageViewer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+            this.Text = "Image Viewer - Ver: "+version.ToString();
+
             //es el que permite que el form registre los eventos de keyboard
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(KeyEvent);
 
@@ -144,9 +149,8 @@ namespace SimpleImageViewer
         }
 
 
-        internal void selectToolStart(object sender, EventArgs e)
+        internal void SelectToolStart(object sender, EventArgs e)
         {
-            //Graphics r;
             var s = 100;
             var c = new FrameControl();
             c.Size = new Size(s, s);
@@ -256,7 +260,7 @@ namespace SimpleImageViewer
                  * Si la imagen no es Webp
                  * inicia carga de Imagen normal 
                  */
-
+                this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+nombreImagen;
 
                 using (Image imgFromFile = Image.FromFile(nombreImagen))
                 {
@@ -333,6 +337,7 @@ namespace SimpleImageViewer
 
             //se deshabilita el boton de abrir imagen
             estadosMenus.EstadoMenu(abrirOpenDialogFile, false);
+            ShortCutKeys.QuitarTeclasAccesoRapido(abrirOpenDialogFile);
 
             //se habilita el boton de cerrar imagen
             estadosMenus.EstadoMenu(closeStripMenuItem, true);
@@ -343,34 +348,42 @@ namespace SimpleImageViewer
              * Menu View
              */
 
-            //se habilita el boton para ver la imagen en tamaño real sin entrar a full screen
+            //se habilita el boton y shortcut para ver la imagen en tamaño real sin entrar a full screen
             estadosMenus.EstadoMenu(viewFullSizeStripMenuItem, true);
+            ShortCutKeys.AsignarTeclasAccesoRapido(viewFullSizeStripMenuItem, Keys.Control | Keys.F);//ver tamaño real
 
-            //se habilita el boton para ver la imagen en full screen
+            //se habilita el boton y shortcut para ver la imagen en full screen
             estadosMenus.EstadoMenu(fullScreenStripMenuItem, true);
+            ShortCutKeys.AsignarTeclasAccesoRapido(fullScreenStripMenuItem, Keys.Alt | Keys.F);
 
-            //se habilita el boton para ver la imagen en el explorador de archivos
+            //se habilita el boton y shortcut para ver la imagen en el explorador de archivos
             estadosMenus.EstadoMenu(openFileLocationMenuItem, true);
+            ShortCutKeys.AsignarTeclasAccesoRapido(openFileLocationMenuItem, Keys.Control | Keys.E);
 
 
             /*
              * Menu Modify
              */
 
-            //se habilita el boton para girar horizontalmente la imagen
+            //se habilita el boton y shortcut para girar horizontalmente la imagen
             estadosMenus.EstadoMenu(flipHMenuItem,true);
+            ShortCutKeys.AsignarTeclasAccesoRapido(flipHMenuItem, Keys.Control | Keys.H);
             
             //se habilita el boton para girar verticalmente la imagen
             estadosMenus.EstadoMenu(flipVMenuItem,true);
-
+            ShortCutKeys.AsignarTeclasAccesoRapido(flipVMenuItem, Keys.Control | Keys.V);
+            
             //se habilita el botn para salvar imagen como
             estadosMenus.EstadoMenu(saveImageStripMenuItem,true);
+            ShortCutKeys.AsignarTeclasAccesoRapido(saveImageStripMenuItem, Keys.Control | Keys.S);
 
             //se habilita el boton de herramienta de seleccion
             estadosMenus.EstadoMenu(selectToolMenuItem, true);
+            ShortCutKeys.AsignarTeclasAccesoRapido(selectToolMenuItem, Keys.Control | Keys.T);
 
             //se habilita el boton de Salvar seleccion
-            estadosMenus.EstadoMenu(saveSelectionMenuItem, true);
+            estadosMenus.EstadoMenu(saveSelectionMenuItem, false);
+            ShortCutKeys.AsignarTeclasAccesoRapido(saveSelectionMenuItem, Keys.None);
 
         
         }
@@ -419,7 +432,8 @@ namespace SimpleImageViewer
                         siguienteImagen = BuscaImage2(currentIndice.ToString(), imagelist);
                         pictureBox1.Image = null;
 
-                        this.Text = "Image Viewer: " + siguienteImagen;
+                        //this.Text = "Image Viewer: " + siguienteImagen;
+                        this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+siguienteImagen;
 
 
                         /*inicia codigo de webp image*/
@@ -485,7 +499,8 @@ namespace SimpleImageViewer
                         siguienteImagen = BuscaImage2(currentIndice.ToString(), imagelist);
                         pictureBox1.Image = null;
 
-                        this.Text = "Image Viewer: " + siguienteImagen;
+                        this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+siguienteImagen;
+                        //this.Text = "Image Viewer: " + siguienteImagen;
 
                         string soloNombre = Path.GetFileName(siguienteImagen);
                         string extension = Path.GetExtension(soloNombre);
@@ -564,7 +579,9 @@ namespace SimpleImageViewer
                         prevImagen = BuscaImage2(currentIndice.ToString(), imagelist);
                         pictureBox1.Image = null;
 
-                        this.Text = "Image Viewer: " + prevImagen;
+
+                        this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+prevImagen;
+                        //this.Text = "Image Viewer: " + prevImagen;
 
                         /*
                          * se carga la imagen en el picturebox
@@ -624,7 +641,8 @@ namespace SimpleImageViewer
                         pictureBox1.Image = null;
 
                         /* se actualiza el titulo de la aplicación */
-                        this.Text = "Image Viewer: " + prevImagen;
+                        //this.Text = "Image Viewer: " + prevImagen;
+                        this.Text = "Image Viewer - Ver: "+version.ToString()+prevImagen;
 
 
                         string soloNombre = Path.GetFileName(prevImagen);
@@ -756,6 +774,7 @@ namespace SimpleImageViewer
             //se asigna la funcion de salir fullscreen al menu child de sair de full size top y se asigna el shotcut
             EventHandlers.AsignarAccionBtnMenu(exitFullSizeStripMenuItem, SalirFullSize);
             ShortCutKeys.AsignarTeclasAccesoRapido(exitFullSizeStripMenuItem, Keys.Control | Keys.Space);
+
             
             
         }
@@ -857,7 +876,8 @@ namespace SimpleImageViewer
         /* end drag and move*/
         internal void CerrarImagen(object sender, EventArgs e)
         {
-            this.Text = "Image Viewer";
+            //this.Text = "Image Viewer";
+            this.Text = "Image Viewer - Ver: "+version.ToString();
             files = null;
             nombreImagen = "";
             myKey = "";

@@ -9,5 +9,11 @@ namespace SimpleImageViewer
             toolStripMenuItem.ShortcutKeys = shortcutKeys;
             toolStripMenuItem.ShowShortcutKeys = true;
         }
+
+        internal static void QuitarTeclasAccesoRapido(ToolStripMenuItem toolStripMenuItem)
+        {
+            toolStripMenuItem.ShortcutKeys = Keys.None;
+            toolStripMenuItem.ShowShortcutKeys = true;
+        }
     }
 }
