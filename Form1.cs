@@ -175,10 +175,6 @@ namespace SimpleImageViewer
             }
         }
 
-        
-
-        
-        
         internal void SalirApp(object sender, EventArgs e)
         {
             Application.Exit();
@@ -292,15 +288,20 @@ namespace SimpleImageViewer
                 }
             }
 
-            string[] extensions = { "jpg", "jpeg", "png", "tiff", "jfif", "webp" };
-            files = Directory.EnumerateFiles(folderName, "*.*").OrderBy(f => f).Where(f => extensions.Contains(f.Split('.').Last().ToLower())).ToArray();
+            ManipularImagen.ImagenesADirectorio(this,pictureBox1,files,imagelist,folderName,i);
+
+           /*string[] extensions = { "jpg", "jpeg", "png", "tiff", "jfif", "webp" };
+            files = Directory.EnumerateFiles(folderName, "*.*")
+           .OrderBy(f =>  f).
+           Where(f => extensions.Contains(f.Split('.').Last()
+           .ToLower())).ToArray();
 
             foreach (string file in files)
             {
                 pictureBox1.Name = i.ToString();
                 ++i;
                 imagelist.Add("index" + i, file.ToString());
-            }
+            }*/
 
 
 
@@ -388,6 +389,10 @@ namespace SimpleImageViewer
 
         
         }
+
+
+        
+
 
         internal void EnterFullScreen(object sender, EventArgs e) 
         {
