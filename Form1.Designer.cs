@@ -43,8 +43,10 @@ namespace SimpleImageViewer
             flipHMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             flipVMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             saveImageStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            exitSelectToolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             selectToolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             saveSelectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            aboutStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             pictureBox1 = new System.Windows.Forms.PictureBox();
             menuStrip1.SuspendLayout();
@@ -55,7 +57,7 @@ namespace SimpleImageViewer
             // 
             menuStrip1.BackColor = System.Drawing.Color.Transparent;
             menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItem1, viewStripMenuItem, modifyStripMenuItem });
+            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItem1, viewStripMenuItem, modifyStripMenuItem, aboutStripMenuItem });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -101,7 +103,6 @@ namespace SimpleImageViewer
             // 
             // viewFullSizeStripMenuItem
             // 
-            viewFullSizeStripMenuItem.Enabled = false;
             viewFullSizeStripMenuItem.Name = "viewFullSizeStripMenuItem";
             viewFullSizeStripMenuItem.ShowShortcutKeys = false;
             viewFullSizeStripMenuItem.Size = new System.Drawing.Size(176, 22);
@@ -109,16 +110,13 @@ namespace SimpleImageViewer
             // 
             // exitFullSizeStripMenuItem
             // 
-            exitFullSizeStripMenuItem.Enabled = false;
             exitFullSizeStripMenuItem.Name = "exitFullSizeStripMenuItem";
             exitFullSizeStripMenuItem.ShowShortcutKeys = false;
             exitFullSizeStripMenuItem.Size = new System.Drawing.Size(176, 22);
             exitFullSizeStripMenuItem.Text = "View Adjusted Mode";
-            exitFullSizeStripMenuItem.Visible = false;
             // 
             // fullScreenStripMenuItem
             // 
-            fullScreenStripMenuItem.Enabled = false;
             fullScreenStripMenuItem.Name = "fullScreenStripMenuItem";
             fullScreenStripMenuItem.ShowShortcutKeys = false;
             fullScreenStripMenuItem.Size = new System.Drawing.Size(176, 22);
@@ -126,7 +124,6 @@ namespace SimpleImageViewer
             // 
             // openFileLocationMenuItem
             // 
-            openFileLocationMenuItem.Enabled = false;
             openFileLocationMenuItem.Name = "openFileLocationMenuItem";
             openFileLocationMenuItem.ShowShortcutKeys = false;
             openFileLocationMenuItem.Size = new System.Drawing.Size(176, 22);
@@ -134,48 +131,57 @@ namespace SimpleImageViewer
             // 
             // modifyStripMenuItem
             // 
-            modifyStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { flipHMenuItem, flipVMenuItem, saveImageStripMenuItem, selectToolMenuItem, saveSelectionMenuItem });
+            modifyStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { flipHMenuItem, flipVMenuItem, saveImageStripMenuItem, exitSelectToolMenuItem, selectToolMenuItem, saveSelectionMenuItem });
             modifyStripMenuItem.Name = "modifyStripMenuItem";
-            modifyStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            modifyStripMenuItem.Text = "Modify";
+            modifyStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            modifyStripMenuItem.Text = "Edit";
             // 
             // flipHMenuItem
             // 
-            flipHMenuItem.Enabled = false;
             flipHMenuItem.Name = "flipHMenuItem";
             flipHMenuItem.ShowShortcutKeys = false;
-            flipHMenuItem.Size = new System.Drawing.Size(180, 22);
+            flipHMenuItem.Size = new System.Drawing.Size(152, 22);
             flipHMenuItem.Text = "Flip Horizontal";
             // 
             // flipVMenuItem
             // 
-            flipVMenuItem.Enabled = false;
             flipVMenuItem.Name = "flipVMenuItem";
             flipVMenuItem.ShowShortcutKeys = false;
-            flipVMenuItem.Size = new System.Drawing.Size(180, 22);
+            flipVMenuItem.Size = new System.Drawing.Size(152, 22);
             flipVMenuItem.Text = "Flip Vertical";
             // 
             // saveImageStripMenuItem
             // 
-            saveImageStripMenuItem.Enabled = false;
             saveImageStripMenuItem.Name = "saveImageStripMenuItem";
             saveImageStripMenuItem.ShowShortcutKeys = false;
-            saveImageStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            saveImageStripMenuItem.Text = "Save Image";
+            saveImageStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            saveImageStripMenuItem.Text = "Save Image As";
+            // 
+            // exitSelectToolMenuItem
+            // 
+            exitSelectToolMenuItem.Name = "exitSelectToolMenuItem";
+            exitSelectToolMenuItem.Size = new System.Drawing.Size(152, 22);
+            exitSelectToolMenuItem.Text = "Exit Select Tool";
             // 
             // selectToolMenuItem
             // 
             selectToolMenuItem.Name = "selectToolMenuItem";
             selectToolMenuItem.ShowShortcutKeys = false;
-            selectToolMenuItem.Size = new System.Drawing.Size(180, 22);
+            selectToolMenuItem.Size = new System.Drawing.Size(152, 22);
             selectToolMenuItem.Text = "Select Tool";
             // 
             // saveSelectionMenuItem
             // 
             saveSelectionMenuItem.Name = "saveSelectionMenuItem";
             saveSelectionMenuItem.ShowShortcutKeys = false;
-            saveSelectionMenuItem.Size = new System.Drawing.Size(180, 22);
+            saveSelectionMenuItem.Size = new System.Drawing.Size(152, 22);
             saveSelectionMenuItem.Text = "Save Selection";
+            // 
+            // aboutStripMenuItem
+            // 
+            aboutStripMenuItem.Name = "aboutStripMenuItem";
+            aboutStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            aboutStripMenuItem.Text = "About";
             // 
             // openFileDialog1
             // 
@@ -228,16 +234,15 @@ namespace SimpleImageViewer
         internal System.Windows.Forms.ToolStripMenuItem openFileLocationMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem exitFullSizeStripMenuItem;
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        internal System.Windows.Forms.MenuStrip menuStrip1;
         internal System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        internal System.Windows.Forms.OpenFileDialog openFileDialog1;
+        internal System.Windows.Forms.PictureBox pictureBox1;
         internal System.Windows.Forms.ToolStripMenuItem viewStripMenuItem;
         
         internal System.Windows.Forms.ToolStripMenuItem modifyStripMenuItem;
-        
-        
-        
+        internal System.Windows.Forms.ToolStripMenuItem exitSelectToolMenuItem;
+        internal System.Windows.Forms.ToolStripMenuItem aboutStripMenuItem;
     }
 }
 

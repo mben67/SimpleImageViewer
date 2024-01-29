@@ -32,7 +32,7 @@ namespace SimpleImageViewer
         string folderName = null;// aqui se guarda la variable para el path del folder seleccionado
 
         Bitmap bmp;
-        
+
         ToolTip ttip = new ToolTip();
 
         //se declara la lista vacia que se llenara al leer la carpeta de imagenes
@@ -43,8 +43,8 @@ namespace SimpleImageViewer
         private int currentY;
 
         //Clases externas propias
-       
-        readonly EstadosMenus estadosMenus = new();
+
+        //readonly EstadosMenus estadosMenus = new();
         readonly ModifImagen modifImagen = new();
 
         Version version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -58,34 +58,20 @@ namespace SimpleImageViewer
             /*
              * se llama a la clase style para setear el estado inicial y las dimensiones del form y su color de fondo
              */
-            
+
             Style.EstadoInicial(this);
-            Style.Dimensiones(this,1280,720);//default (1280,720)
+            Style.Dimensiones(this, 1280, 720);//default (1280,720)
             Style.ColorDeFondo(this, 238, 243, 250);//default (238,243,250)
-           
+
             //Clase Style para backcolor  of the picturebox
             Style.ColorFondoPictureBox(pictureBox1, 238, 243, 250);//default(238,243,250)
-            
+
             //Class style para back color de menu superior y remover el area gris de los items del menu superior
             Style.RemueveAreaGrisSubmenus(menuStrip1);
-            Style.ColorFondoMenuStrip(menuStrip1,216,229,242);//default (216,229,242)
-            
-
+            Style.ColorFondoMenuStrip(menuStrip1, 216, 229, 242);//default (216,229,242)
 
             //se setean las propiedades del opendilaogo para seleccionar file
-            openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            openFileDialog1.Title = "Select Image";
-            openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "All Type Supported (*.jpg; *.jpeg; *.png; *.jfif; *.bmp; *.webp)|*.jpg; *.jpeg; *.png; *.jfif; *.bmp; *.webp |"+
-                                     "Jpeg Image|*.jpeg|" +
-                                     "Jpg Image|*.jpg|" +
-                                     "Png Image|*.png|" +
-                                     "Webp Image|*.webp|" +
-                                     "Bitmap Image|*.bmp|" +
-                                     "Gif Image|*.gif|" +
-                                     "Tiff Image|*.tiff|" +
-                                     "Jfif Image|*.jfif";
-
+            Style.MenuAbrirImagen(openFileDialog1);
 
             /*
              * Si no hay imagen cargada se habilitan y deshabilitan los siguientes botones del menu top
@@ -93,22 +79,34 @@ namespace SimpleImageViewer
              */
 
             //Menu File
-            estadosMenus.EstadoMenu(abrirOpenDialogFile, true);
-            estadosMenus.EstadoMenu(closeStripMenuItem, false);
-            estadosMenus.EstadoMenu(exitStripMenuItem, true);
-           
+            //open file
+            Style.TooltipMenu(abrirOpenDialogFile, "Open Image");
+            EstadosMenus.MenuHabilitado(abrirOpenDialogFile, true);
+
+            //Close file
+            Style.TooltipMenu(closeStripMenuItem,"Close Image");
+            EstadosMenus.MenuHabilitado(closeStripMenuItem, false);
+            EstadosMenus.VisibilidadMenu(closeStripMenuItem,false);
+
+            //close app
+            EstadosMenus.MenuHabilitado(exitStripMenuItem, true);
+
 
             //Menu View
-            estadosMenus.EstadoMenu(viewFullSizeStripMenuItem, false);
-            estadosMenus.EstadoMenu(fullScreenStripMenuItem, false);
-            estadosMenus.EstadoMenu(openFileLocationMenuItem, false);
-            
+            EstadosMenus.MenuHabilitado(viewFullSizeStripMenuItem, false);
+            EstadosMenus.MenuHabilitado(exitFullSizeStripMenuItem, false);
+            EstadosMenus.VisibilidadMenu(exitFullSizeStripMenuItem, false);
+            EstadosMenus.MenuHabilitado(fullScreenStripMenuItem, false);
+            EstadosMenus.MenuHabilitado(openFileLocationMenuItem, false);
+
             //Menu Modify
-            estadosMenus.EstadoMenu(flipHMenuItem, false);
-            estadosMenus.EstadoMenu(flipVMenuItem, false);
-            estadosMenus.EstadoMenu(saveImageStripMenuItem, false);
-            estadosMenus.EstadoMenu(selectToolMenuItem, false);
-            estadosMenus.EstadoMenu(saveSelectionMenuItem,false);
+            EstadosMenus.MenuHabilitado(flipHMenuItem, false);
+            EstadosMenus.MenuHabilitado(flipVMenuItem, false);
+            EstadosMenus.MenuHabilitado(saveImageStripMenuItem, false);
+            EstadosMenus.MenuHabilitado(exitSelectToolMenuItem, false);
+            EstadosMenus.VisibilidadMenu(exitSelectToolMenuItem, false);
+            EstadosMenus.MenuHabilitado(selectToolMenuItem, false);
+            EstadosMenus.MenuHabilitado(saveSelectionMenuItem, false);
 
 
             /*
@@ -129,9 +127,9 @@ namespace SimpleImageViewer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
             //se actualiza la barra de titulo sin ombre de archivo
-            Style.NombreImgTitulo(this,null);
+            Style.NombreImgTitulo(this, null);
 
             //es el que permite que el form registre los eventos de keyboard
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(KeyEvent);
@@ -147,31 +145,81 @@ namespace SimpleImageViewer
             }
         }
 
-
+        //se inicia la herramienta para seleccionar parte de la imagen cargada en el picturebox
         internal void SelectToolStart(object sender, EventArgs e)
         {
-            var s = 100;
-            var c = new FrameControl();
+            var s = 100;//dimensiones del are de seleccion automatica
+            var c = new FrameControl();//se instancia el control
             c.Size = new Size(s, s);
             c.Location = new Point((pictureBox1.Width - s) / 2, (pictureBox1.Height - s) / 2);
             pictureBox1.Controls.Add(c);
 
             pictureBox1.Invalidate();
+
+            //Menu Edit
+            EstadosMenus.MenuHabilitado(saveImageStripMenuItem, false);
+            EstadosMenus.VisibilidadMenu(saveImageStripMenuItem, false);
+
+            EstadosMenus.MenuHabilitado(selectToolMenuItem, false);
+            EstadosMenus.VisibilidadMenu(selectToolMenuItem, false);
+
+            EstadosMenus.MenuHabilitado(saveSelectionMenuItem, true);
+
+            //se habilita y se hace visible el boton de salir de modo seleccion y edicion
+            EstadosMenus.MenuHabilitado(exitSelectToolMenuItem, true);
+            EstadosMenus.VisibilidadMenu(exitSelectToolMenuItem, true);
+            EventHandlers.AsignarAccionBtnMenu(exitSelectToolMenuItem, ExiteSelectionTool);
+
         }
 
-        
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000; //WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
+
         //para la seleccion
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             if (pictureBox1.HasChildren == true)
             {
                 e.Graphics.ExcludeClip(pictureBox1.Controls[0].Bounds);
+
+
+                /***********************/
+                //se calcula el factor del zoom del picturebox
+                var wfactor = (double)pictureBox1.Image.Width / pictureBox1.ClientSize.Width;
+                var hfactor = (double)pictureBox1.Image.Height / pictureBox1.ClientSize.Height;
+                var resizeFactor = Math.Max(wfactor, hfactor);
+
+                //se asigna el tamaño de la imagen ajustada en el picturebox
+                var imageSize = new Size((int)(pictureBox1.Image.Width / resizeFactor), (int)(pictureBox1.Image.Height / resizeFactor));
+
+                // Calcula las coordenadas del rectángulo encima de la imagen
+                int rectX = (pictureBox1.Width - imageSize.Width) / 2;
+                int rectY = (pictureBox1.Height - imageSize.Height) / 2;
+
+
+                // Crea el rectángulo con las coordenadas ajustadas
+                Rectangle rectangle = new Rectangle(rectX, rectY, imageSize.Width, imageSize.Height);
+
+
+                //Rectangle rectangle = new Rectangle(0, 0, (int)(pictureBox1.Image.Width / resizeFactor), (int)(pictureBox1.Image.Height / resizeFactor));
+
+                /****************************/
                 using (var b = new SolidBrush(Color.FromArgb(100, Color.FromArgb(128, 72, 145, 220))))//default(128,72,145,220)
-               
+
                 {
-                    e.Graphics.FillRectangle(b, pictureBox1.ClientRectangle);
+                    // e.Graphics.FillRectangle(b, pictureBox1.ClientRectangle);
+                    e.Graphics.FillRectangle(b, rectangle);
+
                 }
-               
+
             }
         }
 
@@ -211,9 +259,7 @@ namespace SimpleImageViewer
 
             //se invca a la clase Style para mostrar la ruta de la imagen en la barra de titulo
             Style.NombreImgTitulo(this, nombreImagen);
-
-
-
+            
             string soloNombre = Path.GetFileName(nombreImagen);
             string extension = Path.GetExtension(soloNombre);
 
@@ -247,7 +293,7 @@ namespace SimpleImageViewer
                     pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
                     pictureBox1.Tag = nombreImagen;
                     ttip.SetToolTip(pictureBox1, nombreImagen);
-                    
+
                 }
             }// se acaba el if de si es imagen .webp
             else
@@ -256,8 +302,8 @@ namespace SimpleImageViewer
                  * Si la imagen no es Webp
                  * inicia carga de Imagen normal 
                  */
-               // this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+nombreImagen;
-               // CargarImagen.NombreImgTitulo(this, nombreImagen);
+                // this.Text = "Image Viewer - Ver: "+version.ToString()+" - "+nombreImagen;
+                // CargarImagen.NombreImgTitulo(this, nombreImagen);
 
                 using (Image imgFromFile = Image.FromFile(nombreImagen))
                 {
@@ -283,28 +329,14 @@ namespace SimpleImageViewer
                     {
                         pictureBox1.Tag = nombreImagen;
                         ttip.SetToolTip(pictureBox1, nombreImagen);
-                        
+
                     }
                 }
             }
 
-            ManipularImagen.ImagenesADirectorio(this,pictureBox1,files,imagelist,folderName,i);
+            ManipularImagen.ImagenesADirectorio(this, pictureBox1, files, imagelist, folderName, i);
 
-           /*string[] extensions = { "jpg", "jpeg", "png", "tiff", "jfif", "webp" };
-            files = Directory.EnumerateFiles(folderName, "*.*")
-           .OrderBy(f =>  f).
-           Where(f => extensions.Contains(f.Split('.').Last()
-           .ToLower())).ToArray();
-
-            foreach (string file in files)
-            {
-                pictureBox1.Name = i.ToString();
-                ++i;
-                imagelist.Add("index" + i, file.ToString());
-            }*/
-
-
-
+            
             /* se usa la ruta de la imagen como valor para buscar el indice
              que ocupa la iagen en el listado de imagenes del directorio
             para extraerle datos como el indice que ocupa */
@@ -326,40 +358,42 @@ namespace SimpleImageViewer
 
             //se carga la imagen en el picturebox
             pictureBox1.Image = bmp;
-            
+
             /*
              * por último se habilitan y dehabilitan los estados de los menus
              * cuando hay imagen cargada con la clase EstadosMenus y la funcion estadosMenu
              */
 
-            
+
             /*
              * Menu File
              */
 
             //se deshabilita el boton de abrir imagen
-            estadosMenus.EstadoMenu(abrirOpenDialogFile, false);
+            EstadosMenus.MenuHabilitado(abrirOpenDialogFile, false);
+            EstadosMenus.VisibilidadMenu(abrirOpenDialogFile, false);
             ShortCutKeys.QuitarTeclasAccesoRapido(abrirOpenDialogFile);
 
             //se habilita el boton de cerrar imagen
-            estadosMenus.EstadoMenu(closeStripMenuItem, true);
+            EstadosMenus.MenuHabilitado(closeStripMenuItem, true);
+            EstadosMenus.VisibilidadMenu(closeStripMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(closeStripMenuItem, Keys.Control | Keys.Q);
 
-           
+
             /*
              * Menu View
              */
 
             //se habilita el boton y shortcut para ver la imagen en tamaño real sin entrar a full screen
-            estadosMenus.EstadoMenu(viewFullSizeStripMenuItem, true);
+            EstadosMenus.MenuHabilitado(viewFullSizeStripMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(viewFullSizeStripMenuItem, Keys.Control | Keys.F);//ver tamaño real
 
             //se habilita el boton y shortcut para ver la imagen en full screen
-            estadosMenus.EstadoMenu(fullScreenStripMenuItem, true);
+            EstadosMenus.MenuHabilitado(fullScreenStripMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(fullScreenStripMenuItem, Keys.Alt | Keys.F);
 
             //se habilita el boton y shortcut para ver la imagen en el explorador de archivos
-            estadosMenus.EstadoMenu(openFileLocationMenuItem, true);
+            EstadosMenus.MenuHabilitado(openFileLocationMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(openFileLocationMenuItem, Keys.Control | Keys.E);
 
 
@@ -368,33 +402,33 @@ namespace SimpleImageViewer
              */
 
             //se habilita el boton y shortcut para girar horizontalmente la imagen
-            estadosMenus.EstadoMenu(flipHMenuItem,true);
+            EstadosMenus.MenuHabilitado(flipHMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(flipHMenuItem, Keys.Control | Keys.H);
-            
+
             //se habilita el boton para girar verticalmente la imagen
-            estadosMenus.EstadoMenu(flipVMenuItem,true);
+            EstadosMenus.MenuHabilitado(flipVMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(flipVMenuItem, Keys.Control | Keys.V);
-            
+
             //se habilita el botn para salvar imagen como
-            estadosMenus.EstadoMenu(saveImageStripMenuItem,true);
+            EstadosMenus.MenuHabilitado(saveImageStripMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(saveImageStripMenuItem, Keys.Control | Keys.S);
 
             //se habilita el boton de herramienta de seleccion
-            estadosMenus.EstadoMenu(selectToolMenuItem, true);
+            EstadosMenus.MenuHabilitado(selectToolMenuItem, true);
             ShortCutKeys.AsignarTeclasAccesoRapido(selectToolMenuItem, Keys.Control | Keys.T);
 
             //se habilita el boton de Salvar seleccion
-            estadosMenus.EstadoMenu(saveSelectionMenuItem, false);
+            EstadosMenus.MenuHabilitado(saveSelectionMenuItem, false);
             ShortCutKeys.AsignarTeclasAccesoRapido(saveSelectionMenuItem, Keys.None);
 
-        
+
         }
 
 
-        
 
 
-        internal void EnterFullScreen(object sender, EventArgs e) 
+
+        internal void EnterFullScreen(object sender, EventArgs e)
         {
 
             Form2 f2 = new Form2(pictureBox1.Tag.ToString(), pictureBox1.Name, imagelist, currentIndice);
@@ -439,7 +473,7 @@ namespace SimpleImageViewer
                         pictureBox1.Image = null;
 
                         //se actualiza el nombre de archivo en la barra de titulo 
-                        Style.NombreImgTitulo(this,siguienteImagen);
+                        Style.NombreImgTitulo(this, siguienteImagen);
 
 
                         /*inicia codigo de webp image*/
@@ -453,7 +487,7 @@ namespace SimpleImageViewer
                             CargarWebp(siguienteImagen);
                         }
                         else
-                        { 
+                        {
                             /*acaba codigo de webp image*/
 
 
@@ -506,12 +540,12 @@ namespace SimpleImageViewer
                         pictureBox1.Image = null;
 
                         //se actualiza el nombre del archivo en la barra de titulo
-                        Style.NombreImgTitulo(this,siguienteImagen);
-                        
+                        Style.NombreImgTitulo(this, siguienteImagen);
+
 
                         string soloNombre = Path.GetFileName(siguienteImagen);
                         string extension = Path.GetExtension(soloNombre);
-                        
+
                         if (extension == ".webp")
                         {
                             CargarWebp(siguienteImagen);
@@ -588,8 +622,8 @@ namespace SimpleImageViewer
 
 
                         //se actualiz el nombre del archivo en la barra de titulo
-                        Style.NombreImgTitulo(this,prevImagen);
-                        
+                        Style.NombreImgTitulo(this, prevImagen);
+
                         /*
                          * se carga la imagen en el picturebox
                          */
@@ -648,7 +682,7 @@ namespace SimpleImageViewer
                         pictureBox1.Image = null;
 
                         //se actualiza el nombre del archivo en la barra de titulo
-                        Style.NombreImgTitulo(this,prevImagen);
+                        Style.NombreImgTitulo(this, prevImagen);
 
                         string soloNombre = Path.GetFileName(prevImagen);
                         string extension = Path.GetExtension(soloNombre);
@@ -753,13 +787,17 @@ namespace SimpleImageViewer
             }
         }
 
+        //Muestra la imagen en su tamaño real
         internal void FullSizeImage(object sender, EventArgs e)
         {
-            viewFullSizeStripMenuItem.Enabled = false;
-            viewFullSizeStripMenuItem.Visible = false;
+            
+            //se cambia el estado a deshabilitado de Menu Edit -> view real size
+            EstadosMenus.MenuHabilitado(viewFullSizeStripMenuItem, false);
+            EstadosMenus.VisibilidadMenu(viewFullSizeStripMenuItem, false);
 
-            exitFullSizeStripMenuItem.Visible = true;
-            exitFullSizeStripMenuItem.Enabled = true;
+            // se cambia el estado a habilitado de Menu Edit -> view adjusted mode
+            EstadosMenus.MenuHabilitado(exitFullSizeStripMenuItem, true);
+            EstadosMenus.VisibilidadMenu(exitFullSizeStripMenuItem, true);
 
             pictureBox1.Cursor = new Cursor(GetType(), "cursorOpen.cur");
             menuStrip1.BringToFront();
@@ -774,14 +812,14 @@ namespace SimpleImageViewer
             // se centra la imagen
             pictureBox1.Location = new Point(this.ClientSize.Width / 2 - pictureBox1.Width / 2, this.ClientSize.Height / 2 - pictureBox1.Height / 2);
 
-            EventHandlers.AccionesMouseFullSizeImagen(this,pictureBox1);
+            EventHandlers.AccionesMouseFullSizeImagen(this, pictureBox1);
 
             //se asigna la funcion de salir fullscreen al menu child de sair de full size top y se asigna el shotcut
             EventHandlers.AsignarAccionBtnMenu(exitFullSizeStripMenuItem, SalirFullSize);
             ShortCutKeys.AsignarTeclasAccesoRapido(exitFullSizeStripMenuItem, Keys.Control | Keys.Space);
 
-            
-            
+
+
         }
 
         internal void SalirFullSize(object sender, EventArgs e)
@@ -802,11 +840,15 @@ namespace SimpleImageViewer
 
             exitFullSizeStripMenuItem.Click -= SalirFullSize;
 
-            viewFullSizeStripMenuItem.Enabled = true;
-            viewFullSizeStripMenuItem.Visible = true;
+            //se cambia el estado a habilitado del Menu view -> ver real size
+            EstadosMenus.MenuHabilitado(viewFullSizeStripMenuItem,true);
+            EstadosMenus.VisibilidadMenu(viewFullSizeStripMenuItem,true);
+            
+            //se cambia el estado a deshabilitado de Menu view -> view adjusted mode
+            EstadosMenus.MenuHabilitado(exitFullSizeStripMenuItem,false);
+            EstadosMenus.VisibilidadMenu(exitFullSizeStripMenuItem,false);
+            
 
-            exitFullSizeStripMenuItem.Visible = false;
-            exitFullSizeStripMenuItem.Enabled = false;
         }
 
 
@@ -882,8 +924,8 @@ namespace SimpleImageViewer
         internal void CerrarImagen(object sender, EventArgs e)
         {
             //se actualiza la barra de titulo sin el nombre del archivo 
-            Style.NombreImgTitulo(this,null);
-            
+            Style.NombreImgTitulo(this, null);
+
             files = null;
             nombreImagen = "";
             myKey = "";
@@ -893,7 +935,8 @@ namespace SimpleImageViewer
 
             ttip.SetToolTip(pictureBox1, null);
 
-            if (pictureBox1.Dock == DockStyle.None) {
+            if (pictureBox1.Dock == DockStyle.None)
+            {
                 SalirFullSize(sender, e);
             }
 
@@ -901,20 +944,41 @@ namespace SimpleImageViewer
             pictureBox1.Image = null;
 
 
-            //se deshabilitan los botones de cerrar imagen y de imprimir
-            abrirOpenDialogFile.Enabled = true;
-            closeStripMenuItem.Enabled = false;
-            flipHMenuItem.Enabled = false;
-            flipVMenuItem.Enabled = false;
+            //se deshabilitan los botones de cerrar imagen
+            
+            
+            //abrirOpenDialogFile.Enabled = true;
+            EstadosMenus.MenuHabilitado(abrirOpenDialogFile,true);
 
-            viewFullSizeStripMenuItem.Enabled = false;
-            fullScreenStripMenuItem.Enabled = false;
-            openFileLocationMenuItem.Enabled = false;
-            viewFullSizeStripMenuItem.Visible = true;
-            viewFullSizeStripMenuItem.Enabled = false;
-            exitFullSizeStripMenuItem.Visible = false;
-            exitFullSizeStripMenuItem.Enabled = false;
+            //closeStripMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(closeStripMenuItem,false);
 
+            //flipHMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(flipHMenuItem,false);
+
+            //flipVMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(flipVMenuItem,false);
+
+            //viewFullSizeStripMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(viewFullSizeStripMenuItem,false);
+
+            //fullScreenStripMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(fullScreenStripMenuItem, false);
+
+            //openFileLocationMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(openFileLocationMenuItem, false);
+
+            //viewFullSizeStripMenuItem.Visible = true;
+            EstadosMenus.VisibilidadMenu(viewFullSizeStripMenuItem, true);
+
+            //viewFullSizeStripMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(viewFullSizeStripMenuItem,true);
+
+            //exitFullSizeStripMenuItem.Visible = false;
+            EstadosMenus.VisibilidadMenu(exitFullSizeStripMenuItem, false);
+
+            //exitFullSizeStripMenuItem.Enabled = false;
+            EstadosMenus.MenuHabilitado(exitFullSizeStripMenuItem, false);
 
 
             //btnPrint.Enabled = false;
@@ -927,7 +991,7 @@ namespace SimpleImageViewer
 
         internal void flipHImagen(object senders, EventArgs e)
         {
-            modifImagen.FlipHorizontal( pictureBox1);
+            modifImagen.FlipHorizontal(pictureBox1);
         }
 
         internal void flipVImagen(object senders, EventArgs e)
@@ -942,7 +1006,7 @@ namespace SimpleImageViewer
             string extensionImagen = Path.GetExtension(soloNombreImagen);
 
             SaveFileDialog dialog = new SaveFileDialog();
-            
+
             dialog.Title = "Save New Image";
             dialog.DefaultExt = System.IO.Path.GetExtension(pictureBox1.Tag.ToString());
             dialog.AddExtension = true;
@@ -976,7 +1040,7 @@ namespace SimpleImageViewer
                 case ".gif":
                     dialog.FilterIndex = 6;
                     break;
-                
+
                 case ".tiff":
                     dialog.FilterIndex = 7;
                     break;
@@ -985,12 +1049,12 @@ namespace SimpleImageViewer
                     dialog.FilterIndex = 8;
                     break;
             }
-            
-            
+
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string NewExtension = System.IO.Path.GetExtension(dialog.FileName);
-                
+
                 //si la nueva imagen va a ser webp
                 if (NewExtension == ".webp")
                 {
@@ -1088,8 +1152,8 @@ namespace SimpleImageViewer
                             break;
 
                     }
-                    
-                    
+
+
                     //bmp.Save(dialog.FileName, ImageFormat.Jfif);
                 }/*en if tipos de imagen a guardar*/
 
@@ -1138,82 +1202,33 @@ namespace SimpleImageViewer
 
         private static ImageCodecInfo GetEncoderInfo(String mimeType)
         {
-            /* int j;
-             ImageCodecInfo[] encoders;
-             encoders = ImageCodecInfo.GetImageEncoders();
-             for (j = 0; j < encoders.Length; ++j)
-             {
-                 if (encoders[j].MimeType == mimeType)
-                     return encoders[j];
-             }
-             return null;*/
-
             foreach (ImageCodecInfo codec in ImageCodecInfo.GetImageEncoders())
                 if (codec.MimeType == mimeType)
                     return codec;
 
             return null;
         }
-        /*************************AREA DE PRUEBA SELECCTION **********************************/
         
-        
-        
-
-        // Start Rectangle
-        //
-        
-
-        // Draw Rectangle
-        //
-        
-
-        /*private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                if (Rect.Contains(e.Location))
-                {
-                    MessageBox.Show("Right click dentro");
-                }
-                else
-                {
-                    MessageBox.Show("Right click fuera");
-                }
-            }
-        }*/
-
-
-        /************************/
-        /*protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED       
-                return cp;
-            }
-        }
-        */
-
+       
         public void SaveSelection(object sender, EventArgs e)
         {
             SaveFileDialog saveSelect = new SaveFileDialog();
 
-            if(saveSelect.ShowDialog() == DialogResult.OK)
+            if (saveSelect.ShowDialog() == DialogResult.OK)
             {
                 /*MessageBox.Show(pictureBox1.Controls[0].Bounds.Width.ToString()+" / "+
                 pictureBox1.Controls[0].Bounds.Height.ToString());*/
-                
-                 int Xpos = pictureBox1.Controls[0].Bounds.Location.X;
-                 int Ypos = pictureBox1.Controls[0].Bounds.Location.Y;
-                 int ancho = pictureBox1.Controls[0].Bounds.Width;
-                 int alto = pictureBox1.Controls[0].Bounds.Height;
-               
+
+                int Xpos = pictureBox1.Controls[0].Bounds.Location.X;
+                int Ypos = pictureBox1.Controls[0].Bounds.Location.Y;
+                int ancho = pictureBox1.Controls[0].Bounds.Width;
+                int alto = pictureBox1.Controls[0].Bounds.Height;
+
 
                 /*solucion original viene de aca
                  * https://stackoverflow.com/questions/53800328/translate-rectangle-position-in-zoom-mode-picturebox
                  */
-                var selectedRectangle = new Rectangle(Xpos,Ypos, ancho,alto);
+                var selectedRectangle = new Rectangle(Xpos, Ypos, ancho, alto);
                 var result = GetRectangeOnImage(pictureBox1, selectedRectangle);
                 using (var bm = new Bitmap((int)result.Width, (int)result.Height))
                 {
@@ -1224,7 +1239,7 @@ namespace SimpleImageViewer
                     }
                     bm.Save(saveSelect.FileName, ImageFormat.Jpeg);
                 }
-                
+
                 pictureBox1.Controls[0].Dispose();
                 pictureBox1.Invalidate();
             }
@@ -1244,5 +1259,17 @@ namespace SimpleImageViewer
             r2.Offset(-imageRect.X, -imageRect.Y);
             return new RectangleF(r2.X * cx, r2.Y * cy, r2.Width * cx, r2.Height * cy);
         }
+
+        public void ExiteSelectionTool(object sender, EventArgs e)
+        {
+            pictureBox1.Controls[0].Dispose();
+            pictureBox1.Invalidate();
+        }
+
+        public void OpenAboutWindow(object sender, EventArgs e)
+        {
+            MessageBox.Show("Simple Image Viewer - Ver 2.0");
+        }
+
     }
 }

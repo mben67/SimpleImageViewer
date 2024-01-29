@@ -38,9 +38,7 @@ namespace SimpleImageViewer
         internal static void ImagenesADirectorio(Form form ,Control c, string[] ruta, Dictionary<string, string> dictionary, string folderPath,int actulIndice)
         {
 
-           
-
-            ruta = EnumerateFilesWithDefaultExtensions(folderPath);
+           ruta = EnumerateFilesWithDefaultExtensions(folderPath);
 
             foreach (string file in ruta)
             {
@@ -48,9 +46,6 @@ namespace SimpleImageViewer
                 ++actulIndice;
                 dictionary.Add("index" + actulIndice, file.ToString());
             }
-
-            //MessageBox.Show(actulIndice.ToString());
-
         }
 
 

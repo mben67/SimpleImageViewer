@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleImageViewer
 {
     class EstadosMenus
     {
-        public void EstadoMenu(ToolStripMenuItem toolStripMenuItem, Boolean estado )
+        public static void MenuHabilitado(ToolStripMenuItem toolStripMenuItem, Boolean estado)
         {
             toolStripMenuItem.Enabled = estado;
+        }
+
+        public static void VisibilidadMenu(ToolStripMenuItem toolStripMenuItem, Boolean estado)
+        {
+            toolStripMenuItem.Visible = estado;
         }
     }
 

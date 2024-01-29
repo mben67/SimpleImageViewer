@@ -22,7 +22,7 @@ namespace SimpleImageViewer
         {
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            form1.Text = "Image Viewer - Ver: " +version.ToString()+" - "+nombreArchivo;
+            form1.Text = "Image Viewer - Ver: " + version.ToString() + " - " + nombreArchivo;
 
         }
 
@@ -40,12 +40,12 @@ namespace SimpleImageViewer
 
         internal static void ColorFondoMenuStrip(MenuStrip menuStrip, int r, int g, int b)
         {
-            Color color = Color.FromArgb(r,g,b);
+            Color color = Color.FromArgb(r, g, b);
             menuStrip.BackColor = color;
         }
 
 
-        internal static void RemueveAreaGrisSubmenus(MenuStrip menuStrip) 
+        internal static void RemueveAreaGrisSubmenus(MenuStrip menuStrip)
         {
 
             foreach (ToolStripMenuItem menuItem in menuStrip.Items)
@@ -55,6 +55,30 @@ namespace SimpleImageViewer
                     dropDownMenu.ShowImageMargin = false;
                 }
             }
+        }
+
+        internal static void TooltipMenu (ToolStripMenuItem toolStripMenuItem, string texto)
+        {
+            toolStripMenuItem.ToolTipText = texto;
+            
+        }
+
+        internal static void MenuAbrirImagen(OpenFileDialog openFileDialog)
+        {
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            openFileDialog.Title = "Select Image";
+            openFileDialog.FileName = "";
+            openFileDialog.Filter = "All Type Supported (*.jpg; *.jpeg; *.png; *.jfif; *.bmp; *.webp)|*.jpg; *.jpeg; *.png; *.jfif; *.bmp; *.webp |" +
+                                     "Jpeg Image|*.jpeg|" +
+                                     "Jpg Image|*.jpg|" +
+                                     "Png Image|*.png|" +
+                                    /* "Webp Image|*.webp|" +*/
+                                     "Bitmap Image|*.bmp|" +
+                                     "Gif Image|*.gif|" +
+                                     "Tiff Image|*.tiff|" +
+                                     "Jfif Image|*.jfif";
+
+
         }
     }
 }

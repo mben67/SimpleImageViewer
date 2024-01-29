@@ -13,8 +13,10 @@ public class FrameControl : Control
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
-        using (var p = new Pen(Color.FromArgb(0,0,0), 4))
+        using (var p = new Pen(Color.FromArgb(255,255,255), 4))
         {
+
+            p.Width = 1.5f;
             p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             //p.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
             e.Graphics.DrawRectangle(p, 0, 0, Width - 1, Height - 1);

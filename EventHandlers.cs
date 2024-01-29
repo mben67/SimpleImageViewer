@@ -22,6 +22,7 @@ namespace SimpleImageViewer
             formulario.saveSelectionMenuItem.Click += formulario.SaveSelection;
             formulario.selectToolMenuItem.Click += formulario.SelectToolStart;
             formulario.openFileLocationMenuItem.Click += formulario.abrirEnExplorer;
+            formulario.aboutStripMenuItem.Click += formulario.OpenAboutWindow;
         
         }
         
